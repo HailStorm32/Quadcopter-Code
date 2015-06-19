@@ -59,17 +59,19 @@ with a 20 ms delay between pulses. */
 void loop()
   {
     
-    //FourMotor(Chan1, Chan2, Chan3, Chan4, 1000, 1000, 1000, 1000, 2500); //"Prime" esc's   
+    //FourChan(Chan1, Chan2, Chan3, Chan4, 1000, 1000, 1000, 1000, 2500); //"Prime" esc's (esc testing only) 
     
-   delay(8000);
+    delay(8000);
     
     BoardArm(Chan3, Chan4);
     
-    delay(1500);
+    delay(2000);
     
-    SingleMotor(Chan3, 1140, 4000);
+    unArm(Chan3, Chan4);
     
-    //SingleMotor(Chan3, 1000, 4000);
+    //SingleChan(Chan3, 1140, 4000);
+    
+    //SingleChan(Chan3, 1000, 4000);
 
   }
 
