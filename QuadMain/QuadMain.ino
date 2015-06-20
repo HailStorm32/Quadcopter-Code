@@ -1,6 +1,3 @@
-#include "Arduino.h"
-#include "QuadFunctions.h"
-
 // Connect both Ground AND Signal wires to ESC input
 int Chan1 = 3;  //Channel: 1 -- Aileron
 int Chan2 = 9;  //Channel: 2 -- Elevator
@@ -8,6 +5,10 @@ int Chan3 = 10; //Channel: 3 -- Throttle
 int Chan4 = 11; //Channel: 4 -- Rudder
 int arm = 1000; // pulse width in microseconds for arming
 int speedvalue = 1000; // pulse width in microseconds for operation  // TESTED (5/19/15) Equal to 1000 is idol || Greater than (possibly lower) 1150 is motor movement
+int currentSpeed = 1090;
+
+#include "Arduino.h"
+#include "QuadFunctions.h"
 
 void setup() 
  {
@@ -61,17 +62,16 @@ void loop()
     
     //FourChan(Chan1, Chan2, Chan3, Chan4, 1000, 1000, 1000, 1000, 2500); //"Prime" esc's (esc testing only) 
     
-    delay(8000);
+    delay(8000); //alow time to plug in battery
     
     BoardArm(Chan3, Chan4);
+
+    ThrSet(Chan3, 1290, 1);
     
-    delay(2000);
+
+    
+
     
     unArm(Chan3, Chan4);
-    
-    //SingleChan(Chan3, 1140, 4000);
-    
-    //SingleChan(Chan3, 1000, 4000);
-
   }
 
