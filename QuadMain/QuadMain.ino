@@ -167,14 +167,16 @@ with a 20 ms delay between pulses. */
 void loop()
   {
     
+    Data();
+   
     //FourChan(Chan1, Chan2, Chan3, Chan4, 1000, 1000, 1000, 1000, 2500); //"Prime" esc's (esc testing only) 
     
-    delay(8000); //alow time to plug in battery
-    
-    BoardArm(Chan3, Chan4);
-
-    ThrSet(Chan3, 1290, 1);
-    
-    unArm(Chan3, Chan4);
+//    delay(8000); //alow time to plug in battery
+//    
+//    BoardArm(Chan3, Chan4);
+//
+//    ThrSet(Chan3, 1290, 1);
+//    
+//    unArm(Chan3, Chan4);
   }
 

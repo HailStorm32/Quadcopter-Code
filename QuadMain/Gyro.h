@@ -32,7 +32,6 @@ void Data() {
         // (this lets us immediately read more without waiting for an interrupt)
         fifoCount -= packetSize;
 
-       // #ifdef OUTPUT_READABLE_YAWPITCHROLL
             // display Euler angles in degrees
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
@@ -43,7 +42,7 @@ void Data() {
             Serial.print(ypr[1] * 180/M_PI);
             Serial.print("\t");
             Serial.println(ypr[2] * 180/M_PI);
-       // #endif
+
 
         // blink LED to indicate activity
         blinkState = !blinkState;
