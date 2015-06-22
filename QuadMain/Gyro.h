@@ -1,10 +1,20 @@
-void Data() {
-    // if programming failed, don't try to do anything
-    if (!dmpReady) return;
+float  Yaw = 0;
 
+float YawSet() {
+ 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
-
+        // other program behavior stuff here
+        // .
+        // .
+        // .
+        // if you are really paranoid you can frequently test in between other
+        // stuff to see if mpuInterrupt is true, and if so, "break;" from the
+        // while() loop to immediately process the MPU data
+        // .
+        // .
+        // .
     }
 
     // reset interrupt flag and get INT_STATUS byte
@@ -36,16 +46,19 @@ void Data() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            Serial.print("ypr\t");
             Serial.print(ypr[0] * 180/M_PI);
             Serial.print("\t");
-            Serial.print(ypr[1] * 180/M_PI);
-            Serial.print("\t");
-            Serial.println(ypr[2] * 180/M_PI);
-
-
-        // blink LED to indicate activity
-        blinkState = !blinkState;
-        digitalWrite(LED_PIN, blinkState);
+           
+            Yaw = ypr[0];
+            return(Yaw);
+            
+            digitalWrite(12, HIGH);
+            
+            
+            
+            
     }
+    
 }
+
+

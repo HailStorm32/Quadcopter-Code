@@ -41,9 +41,14 @@ int arm = 1000; // pulse width in microseconds for arming
 int speedvalue = 1000; // pulse width in microseconds for operation  // TESTED (5/19/15) Equal to 1000 is idol || Greater than (possibly lower) 1150 is motor movement
 int currentSpeed = 1090;
 
+
 #include "Arduino.h"
 
 #include "QuadFunctions.h"
+
+
+
+
 
 void setup() 
  {
@@ -51,18 +56,20 @@ void setup()
    pinMode(Chan2, OUTPUT);
    pinMode(Chan3, OUTPUT);
    pinMode(Chan4, OUTPUT);
+   pinMode(12 , OUTPUT);
+
    
 // ==========VVVVVV========================VVVVVV==================
 // ===              START GYRO INITIAL SETUP                    ===
 // ==========VVVVVV========================VVVVVV==================
 
 // join I2C bus (I2Cdev library doesn't do this automatically)
-    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-        Wire.begin();
-        TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
-    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-        Fastwire::setup(400, true);
-    #endif
+//    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+//        Wire.begin();
+//        TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
+//    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+//        Fastwire::setup(400, true);
+//    #endif
 
     Serial.begin(115200);
 
@@ -88,7 +95,6 @@ void setup()
     mpu.setXGyroOffset(220);
     mpu.setYGyroOffset(76);
     mpu.setZGyroOffset(-85);
-  //  mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
 
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
@@ -122,8 +128,9 @@ void setup()
 // ==========^^^^^^========================^^^^^^=================
 // ===               END GYRO INITIAL SETUP                    ===
 // ==========^^^^^^========================^^^^^^=================
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //VVVV----------USE ONLY WITH JUST ESC----------VVVV
 /* It appears that the ESC will accept a range of values for the arming
 sequence. This provides 10 pulses with a pulse width of 1000 us with
@@ -158,25 +165,32 @@ with a 20 ms delay between pulses. */
 //      digitalWrite(Chan4, LOW);
 //     delay(20);
 //   }
+//^^^^----------USE ONLY WITH JUST ESC----------^^^^
 
-//^^^^----------USE ONLY WITH JUST ESC----------^^^^   
 }
 
 #include "Gyro.h"
 
+  int Skip = 0;
+
 void loop()
   {
+
+ 
+  YawSet();
+
+
+    if(ypr[0] > 124)
+    {
+      digitalWrite(12, LOW);
+      digitalWrite(13, HIGH);
+     // delay(500);
+    }
     
-    Data();
+      digitalWrite(13, LOW);
+
+  
    
-    //FourChan(Chan1, Chan2, Chan3, Chan4, 1000, 1000, 1000, 1000, 2500); //"Prime" esc's (esc testing only) 
-    
-//    delay(8000); //alow time to plug in battery
-//    
-//    BoardArm(Chan3, Chan4);
-//
-//    ThrSet(Chan3, 1290, 1);
-//    
-//    unArm(Chan3, Chan4);
+
   }
 
