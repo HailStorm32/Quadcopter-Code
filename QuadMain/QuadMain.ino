@@ -8,7 +8,7 @@
 // specific I2C addresses may be passed as a parameter here
 MPU6050 mpu;
 
-#define LED_PIN 13 
+
 bool blinkState = true;
 
 // MPU control/status vars
@@ -41,6 +41,7 @@ int arm = 1000; // pulse width in microseconds for arming
 int speedvalue = 1000; // pulse width in microseconds for operation  // TESTED (5/19/15) Equal to 1000 is idol || Greater than (possibly lower) 1150 is motor movement
 int currentSpeed = 1090;
 float Yaw = 0;
+int Skip = 0;
 
 #include "Arduino.h"
 
@@ -57,6 +58,10 @@ void setup()
    pinMode(Chan3, OUTPUT);
    pinMode(Chan4, OUTPUT);
    pinMode(12 , OUTPUT);
+   pinMode(8 , OUTPUT);
+   pinMode(13, OUTPUT);
+   pinMode(4, OUTPUT);
+
 
    
 // ==========VVVVVV========================VVVVVV==================
@@ -123,8 +128,6 @@ void setup()
         Serial.println(F(")"));
     }
 
-    // configure LED for output
-    pinMode(LED_PIN, OUTPUT);
 // ==========^^^^^^========================^^^^^^=================
 // ===               END GYRO INITIAL SETUP                    ===
 // ==========^^^^^^========================^^^^^^=================
@@ -220,23 +223,56 @@ void loop()
             Serial.print("\t");
            
             Yaw = ypr[0] * 180/M_PI;
+ 
+         if(Skip == 0)
+          { 
+            int millisec = 20000;
            
+            int stoptime = 0;
+
+            time = millis();
+
+            stoptime = time + millisec;
+  
+            while(true) 
+            {
+               
+               digitalWrite(4, HIGH);
+               
+               time = millis();
+   
+               if(time > stoptime)
+               {
+                Skip = 10;
+                break;
+               }
+             }
+          }
             
+            digitalWrite(4, LOW);
             digitalWrite(13, HIGH);
             
             if(Yaw > 123)
             {
               
-            digitalWrite(12, HIGH);
+            digitalWrite(8, LOW);   
+            digitalWrite(12, HIGH); 
               
+              
+            }
+            
+            else if(Yaw < 123)
+            {
+              
+            digitalWrite(8, HIGH);   
+            digitalWrite(12, LOW); 
               
             }
             
             else
             {
-              
-            digitalWrite(12, LOW);
-              
+            digitalWrite(8, LOW);   
+            digitalWrite(12, LOW); 
             }
             
             
