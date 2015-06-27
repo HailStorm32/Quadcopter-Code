@@ -41,7 +41,14 @@ int arm = 1000; // pulse width in microseconds for arming
 int speedvalue = 1000; // pulse width in microseconds for operation  // TESTED (5/19/15) Equal to 1000 is idol || Greater than (possibly lower) 1150 is motor movement
 int currentSpeed = 1090;
 float Yaw = 0;
+float Pitch = 0;
+float Roll = 0;
 int Skip = 0;
+float Yavg = 0;
+float Pavg = 0;
+float Ravg = 0;
+
+
 
 #include "Arduino.h"
 
@@ -219,11 +226,40 @@ void loop()
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+
+            mpu.dmpGetQuaternion(&q, fifoBuffer);
+            mpu.dmpGetGravity(&gravity, &q);
+            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);           
             Serial.print(ypr[0] * 180/M_PI);
-            Serial.print("\t");
-           
+            Serial.print(", ");             
+            Serial.print(ypr[1] * 180/M_PI);
+            Serial.print(", ");                         
+            Serial.println(ypr[2] * 180/M_PI);
+
+            
             Yaw = ypr[0] * 180/M_PI;
+            Pitch = ypr[1] * 180/M_PI;
+            Roll = ypr[2] * 180/M_PI;
  
+         if(Skip == 10)
+         {
+            Yavg = Yaw;
+            Pavg = Pitch;
+            Ravg = Roll;             
+
+            Serial.print(Yavg);
+            Serial.print(", ");             
+            Serial.print(Pavg);
+            Serial.print(", ");                         
+            Serial.println(Ravg);            
+
+            digitalWrite(4, LOW);
+            digitalWrite(13, HIGH);          
+
+            Skip = 5;
+         }
+         
+         
          if(Skip == 0)
           { 
             int millisec = 20000;
@@ -233,26 +269,24 @@ void loop()
             time = millis();
 
             stoptime = time + millisec;
+            Serial.println("Calibrating Gyro....");                         
   
             while(true) 
-            {
-               
+            {   
                digitalWrite(4, HIGH);
                
                time = millis();
-   
+               
                if(time > stoptime)
                {
-                Skip = 10;
+                Skip = 10;             
                 break;
                }
              }
           }
             
-            digitalWrite(4, LOW);
-            digitalWrite(13, HIGH);
-            
-            if(Yaw > 123)
+                                    
+            if(Yaw > Yavg)
             {
               
             digitalWrite(8, LOW);   
@@ -261,7 +295,7 @@ void loop()
               
             }
             
-            else if(Yaw < 123)
+            else if(Yaw < Yavg)
             {
               
             digitalWrite(8, HIGH);   
@@ -274,9 +308,44 @@ void loop()
             digitalWrite(8, LOW);   
             digitalWrite(12, LOW); 
             }
+////////////////////////////////////////////////////////////////////            
+            if(Pitch > Pavg)
+            {
+              
+             //CODE HERE              
+              
+            }
             
+            else if(Pitch < Pavg)
+            {
+              
+             //CODE HERE              
+              
+            }
+
+            else
+            {
+             //CODE HERE              
+            }            
+///////////////////////////////////////////////////////////////////            
+            if(Roll > Ravg)
+            {
+              
+             //CODE HERE              
+              
+            }
             
+            else if(Roll < Ravg)
+            {
+              
+             //CODE HERE              
+              
+            }
             
+            else
+            {
+             //CODE HERE              
+            }
             
             
     }
