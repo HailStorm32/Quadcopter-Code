@@ -32,28 +32,27 @@ void dmpDataReady() {
 // ===            END GYRO DECLARATIONS/INCLUDES                ===
 // =======^^^^^^===========================^^^^^^==================
 
-// Connect both Ground AND Signal wires to ESC input
+//NOTE: Connect both Ground AND Signal wires to ESC input
 int Chan1 = 3;  //Channel: 1 -- Aileron
 int Chan2 = 9;  //Channel: 2 -- Elevator
 int Chan3 = 10; //Channel: 3 -- Throttle
 int Chan4 = 11; //Channel: 4 -- Rudder
 int arm = 1000; // pulse width in microseconds for arming
-int speedvalue = 1000; // pulse width in microseconds for operation  // TESTED (5/19/15) Equal to 1000 is idol || Greater than (possibly lower) 1150 is motor movement
-int currentSpeed = 1090;
-int Yaw = 0;
-int Pitch = 0;
-int Roll = 0;
-int Skip = 0;
-int YavgMx = 0;
-int YavgMi = 0;
-int PavgMx = 0;
-int PavgMi = 0;
-int RavgMx = 0;             
-int RavgMi = 0; 
+int currentSpeed = 1090; //Currenly not is use. Could be deleted later
+int Yaw = 0;  //Holds yaw axis value
+int Pitch = 0; //Holds Pitch axis value
+int Roll = 0;  //Holds Roll axis value
+int Skip = 0;  
+int Yaw_max = 0; //Max allowable value for Yaw axis
+int Yaw_min = 0; //Min allowable value for Yaw axis
+int Pitch_max = 0; //Max allowable value for Pitch axis
+int Pitch_min = 0; //Min allowable value for Pitch axis
+int Roll_max = 0;  //Max allowable value for Roll axis           
+int Roll_min = 0;  //Min allowable value for Roll axis
 
 
 
-#include "Arduino.h"
+//#include "Arduino.h"  //Code will complain without it
 
 #include "QuadFunctions.h"
 
@@ -76,6 +75,8 @@ void setup()
    
 // ==========VVVVVV========================VVVVVV==================
 // ===              START GYRO INITIAL SETUP                    ===
+// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE             ===
+// ===         https://github.com/jrowberg/i2cdevlib            ===
 // ==========VVVVVV========================VVVVVV==================
 
 // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -139,12 +140,14 @@ void setup()
     }
 
 // ==========^^^^^^========================^^^^^^=================
-// ===               END GYRO INITIAL SETUP                    ===
+// ===              END GYRO INITIAL SETUP                     ===
+// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE            ===
+// ===         https://github.com/jrowberg/i2cdevlib           ===
 // ==========^^^^^^========================^^^^^^=================
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//VVVV----------USE ONLY WITH JUST ESC----------VVVV
+
+
+//VVVV----------USE ONLY WITH JUST ESC (TESTING ONLY)----------VVVV
 /* It appears that the ESC will accept a range of values for the arming
 sequence. This provides 10 pulses with a pulse width of 1000 us with
 with a 20 ms delay between pulses. */
@@ -178,7 +181,7 @@ with a 20 ms delay between pulses. */
 //      digitalWrite(Chan4, LOW);
 //     delay(20);
 //   }
-//^^^^----------USE ONLY WITH JUST ESC----------^^^^
+//^^^^----------USE ONLY WITH JUST ESC (TESTING ONLY)----------^^^^
 
 }
 
@@ -186,126 +189,229 @@ with a 20 ms delay between pulses. */
 void loop()
   {
 
-//      // wait for MPU interrupt or extra packet(s) available
-//    while (!mpuInterrupt && fifoCount < packetSize) {
-//        // other program behavior stuff here
-//        // .
-//        // .
-//        // .
-//        // if you are really paranoid you can frequently test in between other
-//        // stuff to see if mpuInterrupt is true, and if so, "break;" from the
-//        // while() loop to immediately process the MPU data
-//        // .
-//        // .
-//        // .
-//    }
-//
-//    // reset interrupt flag and get INT_STATUS byte
-//    mpuInterrupt = false;
-//    mpuIntStatus = mpu.getIntStatus();
-//
-//    // get current FIFO count
-//    fifoCount = mpu.getFIFOCount();
-//
-//    // check for overflow (this should never happen unless our code is too inefficient)
-//    if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-//        // reset so we can continue cleanly
-//        mpu.resetFIFO();
-//        Serial.println(F("FIFO overflow!"));
-//
-//    // otherwise, check for DMP data ready interrupt (this should happen frequently)
-//    } else if (mpuIntStatus & 0x02) {
-//        // wait for correct available data length, should be a VERY short wait
-//        while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-//
-//        // read a packet from FIFO
-//        mpu.getFIFOBytes(fifoBuffer, packetSize);
-//        
-//        // track FIFO count here in case there is > 1 packet available
-//        // (this lets us immediately read more without waiting for an interrupt)
-//        fifoCount -= packetSize;
-//
-//            // display Euler angles in degrees
-//            mpu.dmpGetQuaternion(&q, fifoBuffer);
-//            mpu.dmpGetGravity(&gravity, &q);
-//            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-//
-//            mpu.dmpGetQuaternion(&q, fifoBuffer);
-//            mpu.dmpGetGravity(&gravity, &q);
-//            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);           
-//            Serial.print(ypr[0] * 180/M_PI);
-//            Serial.print(", ");             
-//            Serial.print(ypr[1] * 180/M_PI);
-//            Serial.print(", ");                         
-//            Serial.println(ypr[2] * 180/M_PI);
-//
-//            
-//            Yaw = ypr[0] * 180/M_PI;
-//            Pitch = ypr[1] * 180/M_PI;
-//            Roll = ypr[2] * 180/M_PI;
-//
-//////////VVVVVVVV//////////////RUNS ONCE/////////////VVVVVVVV//////////////////////          
-//         if(Skip == 10)
-//         {
-//            YavgMx = Yaw + 10;
-//            YavgMi = Yaw - 10;
-//            PavgMx = Pitch + 10;
-//            PavgMi = Pitch - 10;
-//            RavgMx = Roll + 10;             
-//            RavgMi = Roll - 10;             
-//
-//            Serial.print(YavgMx);
-//            Serial.print(", ");             
-//            Serial.print(YavgMi);
-//            Serial.print(", ");                         
-//            Serial.println(PavgMx);            
-//            Serial.print(", ");                         
-//            Serial.print(PavgMi);
-//            Serial.print(", ");             
-//            Serial.print(RavgMx);
-//            Serial.print(", ");                         
-//            Serial.println(RavgMi);            
-//
-//            digitalWrite(4, LOW);
-//            digitalWrite(13, HIGH);          
-//
-//            Skip = 5;
-//         }
-//         
-//         if(Skip == 0)
-//          { 
-//            int millisec = 20000;
-//           
-//            int stoptime = 0;
-//
-//            time = millis();
-//
-//            stoptime = time + millisec;
-//            Serial.println("Calibrating Gyro....");                         
-//  
-//            while(true) 
-//            {   
-//               digitalWrite(4, HIGH);
-//               
-//               time = millis();
-//               
-//               if(time > stoptime)
-//               {
-//                BoardArm(Chan3, Chan4);
-//                Skip = 10;             
-//                break;
-//               }
-//             }
-//          }
-/////////////^^^^^^^////////////RUNS ONCE//////////////^^^^^^^^//////////////////                     
-          
-          
-            SingleChan(Chan3, 1150, 0);                         
-            
-           
-            
-            
+// ==========VVVVVV========================VVVVVV==================
+// ===               START READ GYRO VALUES                     ===
+// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE             ===
+// ===         https://github.com/jrowberg/i2cdevlib            ===
+// ==========VVVVVV========================VVVVVV==================    
+      // wait for MPU interrupt or extra packet(s) available
+    while (!mpuInterrupt && fifoCount < packetSize) {
     }
+
+    // reset interrupt flag and get INT_STATUS byte
+    mpuInterrupt = false;
+    mpuIntStatus = mpu.getIntStatus();
+
+    // get current FIFO count
+    fifoCount = mpu.getFIFOCount();
+
+    // check for overflow (this should never happen unless our code is too inefficient)
+    if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+        // reset so we can continue cleanly
+        mpu.resetFIFO();
+        Serial.println(F("FIFO overflow!"));
+
+    // otherwise, check for DMP data ready interrupt (this should happen frequently)
+    } else if (mpuIntStatus & 0x02) {
+        // wait for correct available data length, should be a VERY short wait
+        while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
+
+        // read a packet from FIFO
+        mpu.getFIFOBytes(fifoBuffer, packetSize);
+        
+        // track FIFO count here in case there is > 1 packet available
+        // (this lets us immediately read more without waiting for an interrupt)
+        fifoCount -= packetSize;
+
+            // display Euler angles in degrees
+            mpu.dmpGetQuaternion(&q, fifoBuffer);
+            mpu.dmpGetGravity(&gravity, &q);
+            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+
+            mpu.dmpGetQuaternion(&q, fifoBuffer);
+            mpu.dmpGetGravity(&gravity, &q);
+            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);           
+            Serial.print(ypr[0] * 180/M_PI);
+            Serial.print(", ");             
+            Serial.print(ypr[1] * 180/M_PI);
+            Serial.print(", ");                         
+            Serial.println(ypr[2] * 180/M_PI);
+
+            
+            Yaw = ypr[0] * 180/M_PI;
+            Pitch = ypr[1] * 180/M_PI;
+            Roll = ypr[2] * 180/M_PI;
+// ==========^^^^^^========================^^^^^^=================
+// ===               STOP READ GYRO VALUES                    ===
+// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE            ===
+// ===         https://github.com/jrowberg/i2cdevlib           ===
+// ==========^^^^^^========================^^^^^^=================
+
+
+////////VVVVVVVV//////////////RUNS ONCE (Calibration of Gyro)/////////////VVVVVVVV//////////////////////          
+         
+         line249:
+         
+         if(Skip == 10)
+         {
+           //Set min & max range for the axis
+            Yaw_max = Yaw + 10;
+            Yaw_min = Yaw - 10;
+            Pitch_max = Pitch + 10;
+            Pitch_min = Pitch - 10;
+            Roll_max = Roll + 10;             
+            Roll_min = Roll - 10;             
+            
+            //print min & max values
+            Serial.print(Yaw_max);
+            Serial.print(", ");             
+            Serial.print(Yaw_min);
+            Serial.print(", ");                         
+            Serial.println(Pitch_max);            
+            Serial.print(", ");                         
+            Serial.print(Pitch_min);
+            Serial.print(", ");             
+            Serial.print(Roll_max);
+            Serial.print(", ");                         
+            Serial.println(Roll_min);            
+            
+            
+            digitalWrite(4, LOW);   //turn off red led (Status led)
+            digitalWrite(13, HIGH);  //turn on green led (Status led)      
+
+            Skip = 5; //set skip to 5 as not to run these process again
+         }
+         
+         if(Skip == 0)
+          { 
+            //Set timer for 20 sec
+            int millisec = 20000;
+           
+            int stoptime = 0;
+
+            time = millis();
+
+            stoptime = time + millisec;
+            Serial.println("Calibrating Gyro....");                         
+            
+            //Start timer
+            //would use the default timmer but the gyro doesn't seem to like
+            while(true)
+            {   
+               digitalWrite(4, HIGH); //turn on red led (Status led)
+               
+               time = millis();
+               
+               if(time > stoptime)
+               {
+                BoardArm(Chan3, Chan4); //Arm the board
+                Skip = 10;
+                goto line249;             
+                
+               }
+             }
+          }
+///////////^^^^^^^////////////RUNS ONCE (Calibration of Gyro)//////////////^^^^^^^^//////////////////                     
+
+
+////////VVVVVVVV////////////// YAW AXIS CORRECTION /////////////VVVVVVVV//////////////////////          
+          
+            //If yaw axis is greater than the max value, output yaw PWM to compensate
+            if(Yaw > Yaw_max)
+            {
+              
+            SingleChan(Chan4, 1665, 2); //Write PWM singal with a pulse width of 1665 us for 2 milliseconds to channel 4 (Rudder)          
+           
+            //These have no purpose other than to act as a debugger tool              
+            digitalWrite(8, LOW);   
+            digitalWrite(12, HIGH); 
+               
+            }
+            
+            //If yaw axis is less than the min value, output yaw PWM to compensate            
+            else if(Yaw < Yaw_min)
+            {
+              
+            SingleChan(Chan4, 1265, 2); //Write PWM singal with a pulse width of 1265 us for 2 milliseconds to channel 4 (Rudder)
+            
+            //These have no purpose other than to act as a debugger tool                
+            digitalWrite(8, HIGH);   
+            digitalWrite(12, LOW); 
+              
+            }
+            
+            //Else do nothing
+            else
+            {             
+            
+            //These have no purpose other than to act as a debugger tool  
+            digitalWrite(8, LOW);   
+            digitalWrite(12, LOW); 
+             
+            }
+            
+///////////^^^^^^^//////////// YAW AXIS CORRECTION ///////////////^^^^^^^^//////////////////            
+         
+         
+            
+////////VVVVVVVV////////////// PITCH AXIS CORRECTION /////////////VVVVVVVV//////////////////////          
+            
+            //If pitch axis is greater than the min value, output yaw PWM to compensate
+            if(Pitch > Pitch_max)
+            {
+              
+             //CODE HERE              
+              
+            }
+            
+            //If pitch axis is less than the min value, output yaw PWM to compensate
+            else if(Pitch < Pitch_min)
+            {
+              
+             //CODE HERE  
+             
+            }
+
+            //Else do nothing
+            else
+            {
+              
+             //CODE HERE   
+             
+            }  
+            
+///////////^^^^^^^//////////// YAW AXIS CORRECTION ///////////////^^^^^^^^//////////////////
+
+
+
+////////VVVVVVVV////////////// ROLL AXIS CORRECTION /////////////VVVVVVVV//////////////////////
+            //If roll axis is greater than the max value, output yaw PWM to compensate
+            if(Roll > Roll_max)
+            {
+              
+             //CODE HERE   
+             
+            }
+            
+            //If roll axis is less than the min value, output yaw PWM to compensate
+            else if(Roll < Roll_min)
+            {  
+              
+             //CODE HERE   
+             
+            }
+            
+            //Else do nothing
+            else
+            {
+              
+             //CODE HERE 
+             
+            }
+///////////^^^^^^^//////////// ROLL AXIS CORRECTION ///////////////^^^^^^^^//////////////////
+
+  }            
+}
     
     
     
