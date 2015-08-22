@@ -1,3 +1,14 @@
+//==========================================================================\\
+//                                                                          \\
+//  MUST INSTALL "MPU6050" AND "I2Cdev" LIBRARIES BEFORE FIRST COMPILE!!!   \\
+//                                                                          \\
+//  FROM HERE (https://github.com/jrowberg/i2cdevlib/tree/master/Arduino)   \\
+//                                                                          \\
+//==========================================================================\\
+
+
+
+
 // =======VVVVVV===========================VVVVVV==================
 // ===           START GYRO DECLARATIONS/INCLUDES               ===
 // =======VVVVVV===========================VVVVVV==================
