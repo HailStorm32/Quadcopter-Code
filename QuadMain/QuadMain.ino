@@ -16,6 +16,7 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "I2Cdev.h"
 
+
 // specific I2C addresses may be passed as a parameter here
 MPU6050 mpu;
 
@@ -89,16 +90,16 @@ void setup()
 // ===         CREDIT TO Jeff Rowberg FOR GYRO CODE             ===
 // ===         https://github.com/jrowberg/i2cdevlib            ===
 // ==========VVVVVV========================VVVVVV==================
-
+    int TWBR;
 // join I2C bus (I2Cdev library doesn't do this automatically)
-//    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-//        Wire.begin();
-//        TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
-//    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-//        Fastwire::setup(400, true);
-//    #endif
+    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+       Wire.begin();
+        TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
+    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+        Fastwire::setup(400, true);
+    #endif
 
-    Serial.begin(115200);
+    Serial.begin(115200); //115200
 
     // NOTE: 8MHz or slower host processors, like the Teensy @ 3.3v or Ardunio
     // Pro Mini running at 3.3v, cannot handle this baud rate reliably due to
