@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2CD7666D-A0D3-46B9-A3EE-DC8E284A71E9}</ProjectGuid>
+    <RootNamespace>QuadMain</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\cores\arduino;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\variants\arduino_zero;C:\Users\demet\Documents\GitHub\Quadcopter-Code\QuadMain;C:\Users\demet\Documents\Arduino\libraries\I2Cdev;C:\Users\demet\Documents\Arduino\libraries\I2Cdev\utility;C:\Users\demet\Documents\Arduino\libraries\MPU6050;C:\Users\demet\Documents\Arduino\libraries\MPU6050\utility;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\libraries\Wire;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\libraries\Wire\utility;C:\Users\demet\Documents\arduino-nightly\libraries;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\qvzxoarq.2yi\Micro Platforms\default\debuggers;C:\Users\demet\Documents\Arduino\libraries;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\cores\arduino;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\variants\arduino_zero;C:\Users\demet\Documents\Arduino\libraries\I2Cdev;C:\Users\demet\Documents\Arduino\libraries\MPU6050;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\qvzxoarq.2yi\Micro Platforms\default\debuggers\VM_DBG;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\libraries\Wire;C:\Users\demet\Documents\arduino-nightly\libraries;C:\Users\demet\AppData\Local\arduino15\packages\arduino\hardware\samd\1.6.1\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\qvzxoarq.2yi\Micro Platforms\default\debuggers;C:\Users\demet\Documents\Arduino\libraries;C:\Users\demet\Documents\arduino-nightly/hardware/tools\CMSIS\Device\ATMEL\;C:\Users\demet\Documents\arduino-nightly/hardware/tools\CMSIS\Device\ATMEL\samd21\include;C:\Users\demet\Documents\arduino-nightly/hardware/tools/CMSIS\Device\ARM\ARMCM0\Include;C:\Users\demet\Documents\arduino-nightly/hardware/tools;C:\Users\demet\Documents\arduino-nightly/hardware/tools/CMSIS/CMSIS/Include/;C:\Users\demet\Documents\arduino-nightly/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1\arm-none-eabi\include;C:\Users\demet\Documents\arduino-nightly/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1\arm_none_eabi\include\;C:\Users\demet\Documents\arduino-nightly/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1\lib\gcc\arm-none-eabi\4.4.1\include;C:\Users\demet\Documents\arduino-nightly/hardware/tools/gcc-arm-none-eabi-4.8.3-2014q1\lib\gcc\arm-none-eabi\4.4.1\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\Users\demet\Documents\GitHub\Quadcopter-Code\QuadMain\Visual Micro\.QuadMain.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>_VMDEBUG=1;F_CPU=48000000L;ARDUINO=160;ARDUINO_SAMD_ZERO;ARDUINO_ARCH_SAMD;__SAMD21G18A__;USB_VID=0x2341;USB_PID=0x804d;USBCON;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="QuadMain.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QuadFunctions.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Visual Micro\.QuadMain.vsarduino.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
