@@ -65,6 +65,9 @@ bool yawFlag = false; //Makes sure code doesn't proceed if Yaw_max is incorrect
 bool pitchFlag = false; //Makes sure code doesn't proceed if Pitch_max is incorrect
 bool rollFlag = false; //Makes sure code doesn't proceed if Roll_max is incorrect
 int Val_hold = 0; // Temp hold for axis max check
+int X_off = 0; //Offset for Yaw axis
+int Y_off = 0; //Offset for Pitch axis
+int Z_off = 0; //Offset for Roll axis
 
 //#include "Arduino.h"  //Code will complain without it
 
@@ -204,6 +207,19 @@ void setup()
 void loop()
 {
 
+line207:
+	
+	if (Skip == 30)
+	{
+		X_off = Yaw;
+		Y_off = Pitch;
+		Z_off = Roll;
+
+		Skip = 10;
+	}
+
+
+
 	// ==========VVVVVV========================VVVVVV==================
 	// ===               START READ GYRO VALUES                     ===
 	// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE             ===
@@ -244,19 +260,31 @@ void loop()
 		mpu.dmpGetGravity(&gravity, &q);
 		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
-		mpu.dmpGetQuaternion(&q, fifoBuffer);
-		mpu.dmpGetGravity(&gravity, &q);
-		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-		Serial.print(ypr[0] * 360 / M_PI);
-		Serial.print(", ");
-		Serial.print(ypr[1] * 360 / M_PI);
-		Serial.print(", ");
-		Serial.println(ypr[2] * 360 / M_PI);
+		//mpu.dmpGetQuaternion(&q, fifoBuffer);
+		//mpu.dmpGetGravity(&gravity, &q);
+		//mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+		
+		//Serial.print(ypr[0] * 360 / M_PI);
+		//Serial.print(", ");
+		//Serial.print(ypr[1] * 360 / M_PI);
+		//Serial.print(", ");
+		//Serial.println(ypr[2] * 360 / M_PI);
 
 
 		Yaw = ypr[0] * 360 / M_PI;
 		Pitch = ypr[1] * 360 / M_PI;
 		Roll = ypr[2] * 360 / M_PI;
+
+		Yaw = Yaw - X_off;
+		Pitch = Pitch - Y_off ;
+		Roll = Roll - Z_off;
+
+		Serial.print(Yaw);
+		Serial.print(", ");
+		Serial.print(Pitch);
+		Serial.print(", ");
+		Serial.println(Roll);
+
 		// ==========^^^^^^========================^^^^^^=================
 		// ===               STOP READ GYRO VALUES                    ===
 		// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE            ===
@@ -266,13 +294,20 @@ void loop()
 
 		////////VVVVVVVV//////////////RUNS ONCE (Calibration of Gyro)/////////////VVVVVVVV//////////////////////
 
-	line249:
-
+		if (Skip == 25)
+		{
+			Skip = 30;
+			goto line207;
+		}
+		
+		
 		if (Skip == 10)
 		{
+
+
 			//Set min & max range for the axis
-			Yaw_max = Yaw + 10;
-			Yaw_min = Yaw - 10;
+			Yaw_max = Yaw + 3; //'2' is to low
+			Yaw_min = Yaw - 3; //'2' is to low
 			Pitch_max = Pitch + 10;
 			Pitch_min = Pitch - 10;
 			Roll_max = Roll + 10;
@@ -280,15 +315,18 @@ void loop()
 
 			uint8_t count = 0;
 
-
+			//Make sure max values for all axis aren't over 360
 			while (yawFlag != true && pitchFlag != true && rollFlag != true)
 			{
 
+				//Abort loop and give error if stuck looping
 				if (count > 4)
 				{
-					Serial.print("ERROR!! Stuck in loop... Aborting...");
+					Serial.println("ERROR!! Stuck in loop... Aborting...");
+					Error(1);
 				}
 
+				//Check Yaw_max
 				if (Yaw_max > 360)
 				{
 					Val_hold = Yaw_max - 360;
@@ -297,11 +335,17 @@ void loop()
 
 					if (Yaw_max <= 360)
 					{
-						yawFlag = true;
+						yawFlag = true; //Set flag to true so we know Yaw_max is valid
 					}
 				}
 
-				else if (Pitch_max > 360)
+				else if (Yaw_max <= 360)
+				{
+					yawFlag = true; //Set flag to true so we know Yaw_max is valid
+				}
+
+				//Check Pitch_max
+				if (Pitch_max > 360)
 				{
 					Val_hold = Pitch_max - 360;
 
@@ -309,10 +353,16 @@ void loop()
 
 					if (Pitch_max <= 360)
 					{
-						pitchFlag = true;
+						pitchFlag = true; //Set flag to true so we know Pitch_max is valid
 					}
 				}
 
+				else if (Pitch_max <= 360)
+				{
+					pitchFlag = true; //Set flag to true so we know Pitch_max is valid
+				}
+
+				//Check Roll_max
 				else if (Roll_max > 360)
 				{
 					Val_hold = Roll_max - 360;
@@ -321,11 +371,16 @@ void loop()
 
 					if (Roll_max <= 360)
 					{
-						rollFlag = true;
+						rollFlag = true; //Set flag to true so we know Roll_max is valid
 					}
 				}
 
-				count = count + 1;
+				else if (Roll_max <= 360)
+				{
+					rollFlag = true; //Set flag to true so we know Roll_max is valid
+				}
+
+				count = count + 1; //Add one to count so we can see how many times we have looped
 
 			}
 
@@ -374,8 +429,8 @@ void loop()
 				if (time > stoptime)
 				{
 					BoardArm(Chan3, Chan4); //Arm the board
-					Skip = 10;
-					goto line249;
+					Skip = 25;
+					goto line207;
 
 				}
 			}
@@ -403,17 +458,21 @@ void loop()
 
 			// SingleChan(Chan3, 1265, 250);  //NOT IMPORTANT
 
-			// SingleChan(Chan4, 1265, 1000); //Write PWM singal with a pulse width of 1265 us for 2 milliseconds to channel 4 (Rudder)
+			SingleChan(Chan4, 1570, 10); //Write PWM singal with a pulse width of 1265 us for 2 milliseconds to channel 4 (Rudder)
 
-			//These have no purpose other than to act as a debugger tool
+		   //These have no purpose other than to act as a debugger tool
 			digitalWrite(8, HIGH);
 			digitalWrite(12, LOW);
 
 		}
 
+		//SingleChan(Chan3, 1200, 250);
+
 		//Else do nothing
-		else
+		else if (Yaw > Yaw_min && Yaw < Yaw_max)
 		{
+
+			SingleChan(Chan3, 1200, 10);
 
 			//These have no purpose other than to act as a debugger tool
 			digitalWrite(8, LOW);
@@ -482,5 +541,7 @@ void loop()
 		///////////^^^^^^^//////////// ROLL AXIS CORRECTION ///////////////^^^^^^^^//////////////////
 
 	}
+
+
 }
 
