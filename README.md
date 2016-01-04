@@ -28,6 +28,13 @@ Download the "<i>MPU6050</i>" & "<i>I2Cdev</i>" libraries from <a href="https://
 >Credit to <a href="https://github.com/jrowberg/i2cdevlib">Jeff Rowberg</a> for the mpu6050 libraries.
 
 <br>
+#####Using Visual Studio instead of the Arduino IDE:
+<ul>
+    <li>Download Visual Studio (<a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Link</a>) and make sure C++ is installed durring installation.</li>
+    <li>Then follow <a href="http://www.visualmicro.com/page/User-Guide.aspx?doc=First-steps.html">these</a> steps to get Visual Micro installed.</li>
+</ul>
+
+<br>
 #####Wiring:
 Schematic to come soon...
 
