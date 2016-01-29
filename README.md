@@ -36,7 +36,41 @@ Download the "<i>MPU6050</i>" & "<i>I2Cdev</i>" libraries from <a href="https://
 
 <br>
 #####Wiring:
-Schematic to come soon...
+Below are the connections for the LEDS and Gyro/accel board. (<a href="https://drive.google.com/file/d/0B1cz_y9gphl-a0dzbXdGbVBVVmc/view?usp=sharing">Reference Image</a>)
+><i>A full schematic will come when I have a more complex circuit setup. Right now all the connections for boards and LED's plug right into the Arduino.</i>
+<br>
+
+######Gyro/Accel Board:
+
+|MPU 5060  |Arduino  |
+|:--------:|:-------:|
+|    VCC   |    5V   |
+|  GND     |  GND    |
+|  SCL     |  SCL    |
+| XDA      |  n/a    |
+| XCL      |  n/a    |
+|  ADO     |  n/a    |
+|  INT     |  RX     |
+<br>
+
+######LED's:
+|LED                  |Arduino  |
+|:-------------------:|:-------:|
+|    Left Green LED   |    D12  |
+|  Right Green LED    |  D8     |
+|  Red Status LED     |  D4     |
+| Green Status LED    |  D13    |
+<br>
+######PWM Cables:
+><i>Note: Ground wire goes to GND, and 5V wire does NOT get used.</i>
+
+| PWM Cable           |Arduino  |
+|:-------------------:|:-------:|
+|    Rudder           |    D11  |
+|  Throttle           |  D10    |
+|  Elevator           |  D9     |
+| Aileron             |  D3     |
+<br>
 
 <br>
 
