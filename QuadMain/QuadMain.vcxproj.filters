@@ -24,5 +24,11 @@
     <ClInclude Include="QuadFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.QuadMain.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gyro_Calibration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

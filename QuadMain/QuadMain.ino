@@ -69,9 +69,10 @@ int X_off = 0; //Offset for Yaw axis
 int Y_off = 0; //Offset for Pitch axis
 int Z_off = 0; //Offset for Roll axis
 
-//#include "Arduino.h"  //Code will complain without it
+
 
 #include "QuadFunctions.h"
+#include "Gyro_Calibration.h"
 
 
 
@@ -87,6 +88,8 @@ void setup()
 	pinMode(8, OUTPUT);
 	pinMode(13, OUTPUT);
 	pinMode(4, OUTPUT);
+
+  pinMode(7, OUTPUT);
 
 
 
@@ -285,11 +288,11 @@ line207:
 		Serial.print(", ");
 		Serial.println(Roll);
 
-		// ==========^^^^^^========================^^^^^^=================
-		// ===               STOP READ GYRO VALUES                    ===
-		// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE            ===
-		// ===         https://github.com/jrowberg/i2cdevlib           ===
-		// ==========^^^^^^========================^^^^^^=================
+	// ==========^^^^^^========================^^^^^^=================
+	// ===               STOP READ GYRO VALUES                     ===
+	// ===         CREDIT TO Jeff Rowberg FOR GYRO CODE            ===
+	// ===         https://github.com/jrowberg/i2cdevlib           ===
+	// ==========^^^^^^========================^^^^^^=================
 
 
 		////////VVVVVVVV//////////////RUNS ONCE (Calibration of Gyro)/////////////VVVVVVVV//////////////////////
@@ -303,106 +306,8 @@ line207:
 		
 		if (Skip == 10)
 		{
-
-
-			//Set min & max range for the axis
-			Yaw_max = Yaw + 3; //'2' is to low
-			Yaw_min = Yaw - 3; //'2' is to low
-			Pitch_max = Pitch + 10;
-			Pitch_min = Pitch - 10;
-			Roll_max = Roll + 10;
-			Roll_min = Roll - 10;
-
-			uint8_t count = 0;
-
-			//Make sure max values for all axis aren't over 360
-			while (yawFlag != true && pitchFlag != true && rollFlag != true)
-			{
-
-				//Abort loop and give error if stuck looping
-				if (count > 4)
-				{
-					Serial.println("ERROR!! Stuck in loop... Aborting...");
-					Error(1);
-				}
-
-				//Check Yaw_max
-				if (Yaw_max > 360)
-				{
-					Val_hold = Yaw_max - 360;
-
-					Yaw_max = Yaw_max - Val_hold;
-
-					if (Yaw_max <= 360)
-					{
-						yawFlag = true; //Set flag to true so we know Yaw_max is valid
-					}
-				}
-
-				else if (Yaw_max <= 360)
-				{
-					yawFlag = true; //Set flag to true so we know Yaw_max is valid
-				}
-
-				//Check Pitch_max
-				if (Pitch_max > 360)
-				{
-					Val_hold = Pitch_max - 360;
-
-					Pitch_max = Pitch_max - Val_hold;
-
-					if (Pitch_max <= 360)
-					{
-						pitchFlag = true; //Set flag to true so we know Pitch_max is valid
-					}
-				}
-
-				else if (Pitch_max <= 360)
-				{
-					pitchFlag = true; //Set flag to true so we know Pitch_max is valid
-				}
-
-				//Check Roll_max
-				else if (Roll_max > 360)
-				{
-					Val_hold = Roll_max - 360;
-
-					Roll_max = Roll_max - Val_hold;
-
-					if (Roll_max <= 360)
-					{
-						rollFlag = true; //Set flag to true so we know Roll_max is valid
-					}
-				}
-
-				else if (Roll_max <= 360)
-				{
-					rollFlag = true; //Set flag to true so we know Roll_max is valid
-				}
-
-				count = count + 1; //Add one to count so we can see how many times we have looped
-
-			}
-
-			//print min & max values
-			Serial.print(Yaw_max);
-			Serial.print(", ");
-			Serial.print(Yaw_min);
-			Serial.print(", ");
-			Serial.println(Pitch_max);
-			Serial.print(", ");
-			Serial.print(Pitch_min);
-			Serial.print(", ");
-			Serial.print(Roll_max);
-			Serial.print(", ");
-			Serial.println(Roll_min);
-
-
-			digitalWrite(4, LOW);   //turn off red led (Status led)
-			digitalWrite(13, HIGH);  //turn on green led (Status led)
-
+			Gyro_Calibration(); //Contains more code for gyro calibration
 			Skip = 5; //set skip to 5 as not to run these process again
-
 		}
 
 
@@ -416,6 +321,11 @@ line207:
 			time = millis();
 
 			stoptime = time + millisec;
+			Serial.println("");
+			Serial.println("Yaw Max: ");
+			Serial.print(Yaw_max);
+			Serial.println("Yaw Min: ");
+			Serial.print(Yaw_min);
 			Serial.println("Calibrating Gyro....");
 
 			//Start timer
@@ -428,14 +338,23 @@ line207:
 
 				if (time > stoptime)
 				{
+
+					digitalWrite(7, HIGH);
+					
 					BoardArm(Chan3, Chan4); //Arm the board
 					Skip = 25;
+
+					digitalWrite(7, LOW);
 					goto line207;
 
 				}
 			}
-		}
+		} 
+		
 		///////////^^^^^^^////////////RUNS ONCE (Calibration of Gyro)//////////////^^^^^^^^//////////////////
+
+
+
 
 
 		////////VVVVVVVV////////////// YAW AXIS CORRECTION /////////////VVVVVVVV//////////////////////
@@ -447,8 +366,8 @@ line207:
 			//  SingleChan(Chan4, 1665, 1000); //Write PWM singal with a pulse width of 1665 us for 2 milliseconds to channel 4 (Rudder)
 
 			//These have no purpose other than to act as a debugger tool
-			digitalWrite(8, LOW);
-			digitalWrite(12, HIGH);
+			digitalWrite(8, LOW); //Right LED
+			digitalWrite(12, HIGH); //Left LED
 
 		}
 
@@ -461,8 +380,8 @@ line207:
 			SingleChan(Chan4, 1570, 10); //Write PWM singal with a pulse width of 1265 us for 2 milliseconds to channel 4 (Rudder)
 
 		   //These have no purpose other than to act as a debugger tool
-			digitalWrite(8, HIGH);
-			digitalWrite(12, LOW);
+			digitalWrite(8, HIGH); //Right LED
+			digitalWrite(12, LOW); //Left LED
 
 		}
 
@@ -475,8 +394,8 @@ line207:
 			SingleChan(Chan3, 1200, 10);
 
 			//These have no purpose other than to act as a debugger tool
-			digitalWrite(8, LOW);
-			digitalWrite(12, LOW);
+			digitalWrite(8, LOW); //Right LED
+			digitalWrite(12, LOW); //Left LED
 
 		}
 
@@ -510,7 +429,7 @@ line207:
 
 		}
 
-		///////////^^^^^^^//////////// YAW AXIS CORRECTION ///////////////^^^^^^^^//////////////////
+		///////////^^^^^^^//////////// PITCH AXIS CORRECTION ///////////////^^^^^^^^//////////////////
 
 
 
@@ -538,7 +457,7 @@ line207:
 			//CODE HERE
 
 		}
-		///////////^^^^^^^//////////// ROLL AXIS CORRECTION ///////////////^^^^^^^^//////////////////
+		///////////^^^^^^^//////////// ROLL AXIS CORRECTION ///////////////^^^^^^^^////////////////////
 
 	}
 
