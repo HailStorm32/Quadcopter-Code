@@ -4,7 +4,7 @@
 ####Project Goal:
 A fully autonomous quadcopter system that uses an Arduino as the "brain". 
 
-<br>This is accomplished by using the quad's main control board (<a href="https://goo.gl/bwyB3Q">example</a>) for the PID balancing, and an Arduino to act as a remote on the quad by outputing PWM signals directly into the control board (where the RC receiver would usually connect). This enables the Arduino to be used purely for autonomous calculations, and not have to sacrifice processing power for PID balancing calculations. By having the Arduino output commands in the form of PWM signals into the control board's RC receiver ports, this enables for a fast and easy switch from manual to autonomous mode by swithing between the Arduino's input, and a RC reciver input via an electronic switch (more details on this system below).
+<br>This is accomplished by using the quad's main control board (<a href="https://goo.gl/bwyB3Q">example</a>) for the PID balancing, and an Arduino to act as a remote on the quad by outputting PWM signals directly into the control board (where the RC receiver would usually connect). This enables the Arduino to be used purely for autonomous calculations, and not have to sacrifice processing power for PID balancing calculations. By having the Arduino output commands in the form of PWM signals into the control board's RC receiver ports, this enables for a fast and easy switch from manual to autonomous mode by switching between the Arduino's input, and a RC receiver input via an electronic switch (more details on this system below).
 
 <br>
 ####Components:
@@ -30,7 +30,7 @@ Download the "<i>MPU6050</i>" & "<i>I2Cdev</i>" libraries from <a href="https://
 <br>
 #####Using Visual Studio instead of the Arduino IDE:
 <ul>
-    <li>Download Visual Studio (<a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Link</a>) and make sure C++ is installed durring installation.</li>
+    <li>Download Visual Studio (<a href="https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx">Link</a>) and make sure C++ is installed during installation.</li>
     <li>Then follow <a href="http://www.visualmicro.com/page/User-Guide.aspx?doc=First-steps.html">these</a> steps to get Visual Micro installed.</li>
 </ul>
 
